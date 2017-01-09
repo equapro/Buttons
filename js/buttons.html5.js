@@ -1045,29 +1045,31 @@ DataTable.ext.buttons.excelHtml5 = {
 				row[i] = $.trim( row[i] );
 
 				// Special number formatting options
-				for ( var j=0, jen=_excelSpecials.length ; j<jen ; j++ ) {
-					var special = _excelSpecials[j];
+                if ( !isNaN(row[i]) && String(row[i]).length === String(Number(row[i])).length ) {
+                    for ( var j=0, jen=_excelSpecials.length ; j<jen ; j++ ) {
+    					var special = _excelSpecials[j];
 
-					if ( row[i].match && row[i].match( special.match ) ) {
-						var val = row[i].replace(/[^\d\.\-]/g, '');
+    					if ( row[i].match && row[i].match( special.match ) ) {
+    						var val = row[i].replace(/[^\d\.\-]/g, '');
 
-						if ( special.fmt ) {
-							val = special.fmt( val );
-						}
+    						if ( special.fmt ) {
+    							val = special.fmt( val );
+    						}
 
-						cell = _createNode( rels, 'c', {
-							attr: {
-								r: cellId,
-								s: special.style
-							},
-							children: [
-								_createNode( rels, 'v', { text: val } )
-							]
-						} );
+    						cell = _createNode( rels, 'c', {
+    							attr: {
+    								r: cellId,
+    								s: special.style
+    							},
+    							children: [
+    								_createNode( rels, 'v', { text: val } )
+    							]
+    						} );
 
-						break;
-					}
-				}
+    						break;
+    					}
+    				}
+                }
 
 				if ( ! cell ) {
 					if ( typeof row[i] === 'number' || (
